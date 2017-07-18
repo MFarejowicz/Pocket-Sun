@@ -5,18 +5,28 @@ function setup() {
   var gameCanvas = createCanvas(800, 800)
   gameCanvas.parent("gameContainer")
   sun = new Sun()
-  for (let i = 0; i < 100; i++) {
-    lions.push(new Lion())
-  }
+  // for (let i = 0; i < 100; i++) {
+  //   lions.push(new Lion())
+  // }
+
 }
 
 function draw() {
   background(0)
-  for (let i = 0; i < lions.length; i++) {
+  this.move()
+  if (frameCount % 4 == 0) {
+    lions.push(new Lion())
+  }
+  for (let i = lions.length-1; i >= 0; i--) {
     lions[i].show()
+    lions[i].update(sun)
+    if (lions[i].hits(sun)){
+      lions.splice(i,1)
+      sun.heal()
+    }
   }
   sun.show()
-  this.move()
+  sun.update()
 
 }
 
