@@ -3,8 +3,9 @@ function Lion() {
   this.y = random(height)
   this.radius = 15
   this.speed = 2
-  this.dirX = random([-1,0,1])
-  this.dirY = random([-1,0,1])
+  this.dirX = random([-1, 0, 1])
+  this.dirY = (this.dirX == 0 ? random([-1,1]) : random([-1,0,1]))
+  this.runScale = .8
 
   this.show = function() {
     fill(255)
@@ -20,16 +21,22 @@ function Lion() {
   }
 
   this.update = function(sun) {
+    if (this.x < 0 || this.x > width){
+      this.dirX = -this.dirX
+    }
+    if (this.y < 0 || this.y > height) {
+      this.dirY = -this.dirY
+    }
     if (this.distance(sun) < 100) {
       if (this.x < sun.x) {
-        this.x -= this.speed/sqrt(2)
+        this.x -= this.speed/this.runScale
       } else {
-        this.x += this.speed/sqrt(2)
+        this.x += this.speed/this.runScale
       }
       if (this.y < sun.y) {
-        this.y -= this.speed/sqrt(2)
+        this.y -= this.speed/this.runScale
       } else {
-        this.y += this.speed/sqrt(2)
+        this.y += this.speed/this.runScale
       }
     } else {
       this.x += this.dirX * this.speed

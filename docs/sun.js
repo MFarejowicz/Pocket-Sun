@@ -12,7 +12,6 @@ function Sun() {
     fill(255, 0 , 0)
     rect(30, 30, 2*this.health, 40)
     textSize(32)
-    fill(255,0,0)
     text(this.kills, 750, 60)
   }
 
@@ -27,7 +26,11 @@ function Sun() {
 
   this.heal = function() {
     this.kills += 1
-    this.health += 5
+    if (this.health + 5 > 100){
+      this.health = 100
+    } else {
+      this.health += 5
+    }
   }
 
   this.moveUp = function() {
