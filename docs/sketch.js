@@ -3,8 +3,11 @@ var sun
 var lions = []
 var menu
 var menuActive = false
+var pause = false
+var gameOver
+var gameOverActive = false
 var spawnRate = 4 //decrease to increase spawn
-var lionLimit = 100
+var lionLimit = 200
 
 function setup() {
   // bg = loadImage("../static/img/space.jpg")
@@ -12,11 +15,24 @@ function setup() {
   gameCanvas.parent("gameContainer")
   sun = new Sun()
   menu = new Menu()
+  gameOver = new GameOver()
 }
 
 function draw() {
   background(0)
-  if (!this.menuActive){
+  if (this.menuActive) {
+    menu.show(sun)
+  }
+  // else if (this.gameOverActive) {
+  //   gameOver.show()
+  // }
+  else if (this.pause){
+    for (let i = lions.length-1; i >=0; i--){
+      lions[i].show()
+    }
+    sun.show()
+  }
+  else {
     this.move()
     if (frameCount % this.spawnRate == 0 && lions.length < this.lionLimit) {
       lions.push(new Lion())
@@ -31,19 +47,27 @@ function draw() {
     }
     sun.show()
     sun.update()
-  } else {
-    menu.show(sun)
+    // if (sun.health <= 0) {
+    //   gameOverActive = true
+    // }
   }
 }
 
 function keyPressed() {
   if (keyCode === 69 && !this.menuActive){
     this.menuActive = true
-  } else if (keyCode === 69 && this.menuActive){
+  }
+  else if (keyCode === 69 && this.menuActive){
     this.menuActive = false
   }
   else if (keyCode === 49 && this.menuActive) {
     menu.upsize(sun)
+  }
+  else if (keyCode == 81 && !this.pause){
+    this.pause = true
+  }
+  else if (keyCode == 81 && this.pause) {
+    this.pause = false
   }
 }
 
@@ -82,10 +106,21 @@ function Menu() {
     text(sun.kills, 750, 60)
   }
   this.upsize = function(sun){
-    if (sun.kills > this.sizeCost){
+    if (sun.kills >= this.sizeCost){
       sun.radius += 20
       sun.kills -= this.sizeCost
       this.sizeCost += 25
     }
+  }
+}
+
+function GameOver() {
+
+  this.show = function(){
+    fill(255)
+    rect(0,0,799,799)
+    fill(255,0,0)
+    text("GAME OVER", 350, 350)
+    text("Refresh to restart", 350, 450)
   }
 }

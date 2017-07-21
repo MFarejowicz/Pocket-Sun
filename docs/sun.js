@@ -5,8 +5,10 @@ function Sun() {
   this.x = width / 2
   this.radius = 25
   this.speed = 5
+  this.drain = .25 //decrease to slow drain
+  this.healRate = 5
+  this.totalKills = 0
   this.kills = 0
-  this.drain = .3 //decrease to slow drain
 
   this.show = function() {
     fill(204, 102, 0)
@@ -15,6 +17,7 @@ function Sun() {
     rect(30, 30, 2 * this.health, 40)
     textSize(32)
     text(this.kills, 750, 60)
+    text(this.totalKills, 750, 20)
   }
 
   this.update = function() {
@@ -24,14 +27,27 @@ function Sun() {
     if (this.health <= 0) {
       this.health = 0
     }
+    if (this.x <= 0) {
+      this.x = 0
+    }
+    if (this.x >= width) {
+      this.x = width
+    }
+    if (this.y <= 0) {
+      this.y = 0
+    }
+    if (this.y >= height) {
+      this.y = height
+    }
   }
 
   this.heal = function() {
+    this.totalKills += 1
     this.kills += 1
-    if (this.health + 5 > this.healthCap){
+    if (this.health + this.healRate > this.healthCap){
       this.health = this.healthCap
     } else {
-      this.health += 5
+      this.health += this.healRate
     }
   }
 
