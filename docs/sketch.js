@@ -3,6 +3,7 @@ var sun
 var lions = []
 var menu
 var menuActive = false
+var spawnRate = 4 //decrease to increase spawn
 var lionLimit = 100
 
 function setup() {
@@ -17,7 +18,7 @@ function draw() {
   background(0)
   if (!this.menuActive){
     this.move()
-    if (frameCount % 4 == 0 && lions.length < this.lionLimit) {
+    if (frameCount % this.spawnRate == 0 && lions.length < this.lionLimit) {
       lions.push(new Lion())
     }
     for (let i = lions.length-1; i >= 0; i--) {

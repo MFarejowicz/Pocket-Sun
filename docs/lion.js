@@ -5,6 +5,7 @@ function Lion() {
   this.speed = 2
   this.dirX = random([-1, 0, 1])
   this.dirY = (this.dirX == 0 ? random([-1,1]) : random([-1,0,1]))
+  this.runDistance = 100
   this.runScale = .8
 
   this.show = function() {
@@ -27,7 +28,7 @@ function Lion() {
     if (this.y < 0 || this.y > height) {
       this.dirY = -this.dirY
     }
-    if (this.distance(sun) < 100) {
+    if (this.distance(sun) < this.runDistance) {
       if (this.x < sun.x) {
         this.x -= this.speed/this.runScale
       } else {
