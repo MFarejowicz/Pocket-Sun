@@ -1,4 +1,4 @@
-function Lion() {
+function Lion(runScale) {
   this.x = random(width)
   this.y = random(height)
   this.radius = 15
@@ -6,7 +6,7 @@ function Lion() {
   this.dirX = random([-1, 0, 1])
   this.dirY = (this.dirX == 0 ? random([-1,1]) : random([-1,0,1]))
   this.runDistance = 100
-  this.runScale = .9
+  this.runScale = runScale
 
   this.show = function() {
     fill(255)
