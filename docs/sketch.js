@@ -6,6 +6,7 @@ var menuActive = false
 var pause = false
 var gameOver
 var gameOverActive = false
+var bulletsUnlocked = true
 var spawnRate = 4 //decrease to increase spawn
 var lionLimit = 200
 var lionRunScale = .9
@@ -34,7 +35,7 @@ function draw() {
     sun.show()
   }
   else {
-    this.move()
+    this.moveandshoot()
     if (frameCount % this.spawnRate == 0 && lions.length < this.lionLimit) {
       lions.push(new Lion(lionRunScale))
     }
@@ -87,7 +88,7 @@ function keyPressed() {
   }
 }
 
-function move() {
+function moveandshoot() {
   if (keyIsDown(87) && keyIsDown(65)) {
     sun.moveUpLeft()
   } else if (keyIsDown(87) && keyIsDown(68)) {
@@ -104,6 +105,15 @@ function move() {
     sun.moveRight()
   } else if (keyIsDown(65)) {
     sun.moveLeft()
+  }
+  if (bulletsUnlocked && keyIsDown(38)){
+    sun.shootUp()
+  } else if (bulletsUnlocked && keyIsDown(40)) {
+    sun.shootDown()
+  } else if (bulletsUnlocked && keyIsDown(39)) {
+    sun.shootRight()
+  } else if (bulletsUnlocked && keyIsDown(37)) {
+    sun.shootLeft()
   }
 }
 
