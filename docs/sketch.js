@@ -6,7 +6,7 @@ var menuActive = false
 var pause = false
 var gameOver
 var gameOverActive = false
-var bulletsUnlocked = true
+var bulletsUnlocked = false
 var spawnRate = 4 //decrease to increase spawn
 var lionLimit = 200
 var lionRunScale = .9
@@ -42,9 +42,13 @@ function draw() {
     for (let i = lions.length-1; i >= 0; i--) {
       lions[i].show()
       lions[i].update(sun)
-      if (lions[i].hits(sun)){
+      let impact = lions[i].hits(sun)
+      if (impact.hit){
         lions.splice(i,1)
-        sun.heal()
+        sun.upkills()
+        if (impact.heal) {
+          sun.heal()
+        }
       }
     }
     sun.show()
@@ -56,34 +60,46 @@ function draw() {
 }
 
 function keyPressed() {
-  if (keyCode === 69 && !this.menuActive){
+  if (!this.menuActive && keyCode === 69){
     this.menuActive = true
   }
-  else if (keyCode === 69 && this.menuActive){
+  else if (this.menuActive && keyCode === 69){
     this.menuActive = false
   }
-  else if (keyCode === 49 && this.menuActive) {
-    menu.upsize(sun)
+  else if (this.menuActive && keyCode === 49) {
+    menu.upsize()
   }
-  else if (keyCode === 50 && this.menuActive) {
-    menu.upspeed(sun)
+  else if (this.menuActive && keyCode === 50) {
+    menu.upspeed()
   }
-  else if (keyCode === 51 && this.menuActive) {
-    menu.uphealthcap(sun)
+  else if (this.menuActive &&keyCode === 51) {
+    menu.uphealthcap()
   }
-  else if (keyCode === 52 && this.menuActive) {
+  else if (this.menuActive && keyCode === 52) {
     menu.uplimit()
   }
-  else if (keyCode === 53 && this.menuActive) {
+  else if (this.menuActive && keyCode === 53) {
     menu.upspawn()
   }
-  else if (keyCode === 54 && this.menuActive) {
-    menu.slowrun(lions)
+  else if (this.menuActive && keyCode === 54) {
+    menu.slowrun()
   }
-  else if (keyCode == 81 && !this.pause){
+  else if (this.menuActive && !this.bulletsUnlocked && keyCode === 55) {
+    menu.unlockbullets()
+  }
+  else if (this.menuActive && keyCode === 56) {
+    menu.upfirerate()
+  }
+  else if (this.menuActive && keyCode === 57) {
+    menu.upbulletspeed()
+  }
+  else if (this.menuActive && keyCode === 48) {
+    menu.upbulletsize()
+  }
+  else if (!this.pause && keyCode == 81){
     this.pause = true
   }
-  else if (keyCode == 81 && this.pause) {
+  else if (this.pause && keyCode == 81) {
     this.pause = false
   }
 }
@@ -124,6 +140,10 @@ function Menu() {
   this.healthCapCost = 25
   this.speedCost = 25
   this.runCost = 25
+  this.bulletCost = 1000
+  this.fireRateCost = 25
+  this.bulletSpeedCost = 25
+  this.bulletSizeCost = 25
 
   this.show = function(sun, lions) {
     fill(255)
@@ -155,7 +175,23 @@ function Menu() {
     text("Cost: " + this.runCost, 500, 360)
     text("Press 6 to upgrade", 50, 380)
     text("Kills: " + sun.kills, 620, 30)
+    text("Unlock bullets!", 30, 460)
+    text("Cost: " + this.bulletCost, 500, 460)
+    text("Press 7 to upgrade", 50, 480)
+    text("Bullet fire rate", 30, 520)
+    text("Current: " + sun.fireRate, 250, 520)
+    text("Cost: " + this.fireRateCost, 500, 520)
+    text("Press 8 to upgrade", 50, 540)
+    text("Bullet speed", 30, 580)
+    text("Current: " + sun.bulletSpeed, 250, 580)
+    text("Cost: " + this.bulletSpeedCost, 500, 580)
+    text("Press 9 to upgrade", 50, 600)
+    text("Bullet size", 30, 640)
+    text("Current: " + sun.bulletSize, 250, 640)
+    text("Cost: " + this.bulletSizeCost, 500, 640)
+    text("Press 0 to upgrade", 50, 660)
   }
+
   this.upspawn = function() {
     if (sun.kills >= this.spawnCost){
       spawnRate -= .5
@@ -170,28 +206,28 @@ function Menu() {
       this.limitCost += 25
     }
   }
-  this.upsize = function(sun){
+  this.upsize = function(){
     if (sun.kills >= this.sizeCost){
       sun.radius += 20
       sun.kills -= this.sizeCost
       this.sizeCost += 25
     }
   }
-  this.uphealthcap = function(sun){
+  this.uphealthcap = function(){
     if (sun.kills >= this.healthCapCost){
       sun.healthCap += 25
       sun.kills -= this.healthCapCost
       this.healthCapCost += 25
     }
   }
-  this.upspeed = function(sun){
+  this.upspeed = function(){
     if (sun.kills >= this.speedCost){
       sun.speed += 1
       sun.kills -= this.speedCost
       this.speedCost += 25
     }
   }
-  this.slowrun = function(lions){
+  this.slowrun = function(){
     if (sun.kills >= this.runCost){
       for (let i = 0; i < lions.length; i ++){
         lions[i].runScale += .1
@@ -199,6 +235,33 @@ function Menu() {
       lionRunScale += .1
       sun.kills -= this.runCost
       this.runCost += 25
+    }
+  }
+  this.unlockbullets = function() {
+    if (sun.kills >= this.bulletCost){
+      bulletsUnlocked = true
+      sun.kills -= this.bulletCost
+    }
+  }
+  this.upfirerate = function(){
+    if (sun.kills >= this.fireRateCost){
+      sun.fireRate -= .02
+      sun.kills -= this.fireRateCost
+      this.fireRateCost += 25
+    }
+  }
+  this.upbulletspeed = function(){
+    if (sun.kills >= this.bulletSpeedCost){
+      sun.bulletSpeed += 5
+      sun.kills -= this.bulletSpeedCost
+      this.bulletSpeedCost += 25
+    }
+  }
+  this.upbulletsize = function(){
+    if (sun.kills >= this.bulletSizeCost){
+      sun.bulletSize += 5
+      sun.kills -= this.bulletSizeCost
+      this.bulletSizeCost += 25
     }
   }
 }

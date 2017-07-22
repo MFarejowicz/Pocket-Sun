@@ -12,6 +12,8 @@ function Sun() {
   this.bullets = []
   this.fireDelay = 0
   this.fireRate = .2 //decrease to increase fire rate
+  this.bulletSpeed = 10
+  this.bulletSize = 25
 
   this.show = function() {
     for (let i = 0; i < this.bullets.length; i++){
@@ -27,8 +29,11 @@ function Sun() {
   }
 
   this.update = function() {
-    for (let i = 0; i < this.bullets.length; i++){
+    for (let i = this.bullets.length-1; i >=0; i--){
       this.bullets[i].update()
+      if (this.bullets[i].offscreen()){
+        this.bullets.splice(i,1)
+      }
     }
     if (frameCount % 2 == 0){
       this.health -= this.drain
@@ -51,9 +56,12 @@ function Sun() {
     this.fireDelay -=.01
   }
 
-  this.heal = function() {
+  this.upkills = function() {
     this.totalKills += 1
     this.kills += 1
+  }
+
+  this.heal = function() {
     if (this.health + this.healRate > this.healthCap){
       this.health = this.healthCap
     } else {
@@ -91,41 +99,47 @@ function Sun() {
   }
   this.shootUp = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x, this.y - this.radius, 0, -1))
+      this.bullets.push(new Bullet(this.x, this.y - this.radius, 0, -1, this.bulletSpeed, this.bulletSize))
       this.fireDelay = this.fireRate
     }
   }
   this.shootDown = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x, this.y + this.radius, 0, 1))
+      this.bullets.push(new Bullet(this.x, this.y + this.radius, 0, 1, this.bulletSpeed, this.bulletSize))
       this.fireDelay = this.fireRate
     }
   }
   this.shootRight = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x + this.radius, this.y, 1, 0))
+      this.bullets.push(new Bullet(this.x + this.radius, this.y, 1, 0, this.bulletSpeed, this.bulletSize))
       this.fireDelay = this.fireRate
     }
   }
   this.shootLeft = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x - this.radius, this.y, -1, 0))
+      this.bullets.push(new Bullet(this.x - this.radius, this.y, -1, 0, this.bulletSpeed, this.bulletSize))
       this.fireDelay = this.fireRate
     }
   }
 }
 
-function Bullet(x, y, dirX, dirY) {
+function Bullet(x, y, dirX, dirY, speed, size) {
   this.x = x
   this.y = y
   this.dirX = dirX
   this.dirY = dirY
-  this.speed = 10
-  this.radius = 10
+  this.speed = speed
+  this.radius = size
 
   this.show = function() {
     fill(204, 150, 0)
     ellipse(this.x,this.y, this.radius*2, this.radius*2)
+  }
+
+  this.offscreen = function() {
+    if (this.x < 0 || this.x > width || this.y < 0 || this.y > width){
+      return true
+    }
   }
 
   this.update = function() {

@@ -15,8 +15,15 @@ function Lion(runScale) {
 
   this.hits = function(sun) {
     if (this.distance(sun) < sun.radius) {
-      return true
+      return {hit: true, heal: true}
     }
+    for (let i = sun.bullets.length-1; i >= 0; i--){
+      if (this.distance(sun.bullets[i]) < sun.bullets[i].radius) {
+        sun.bullets.splice(i,1)
+        return {hit: true, heal: false}
+      }
+    }
+    return {hit: false, heal: false}
   }
 
   this.update = function(sun) {
