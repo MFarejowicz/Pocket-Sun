@@ -15,9 +15,9 @@ function Sun() {
     ellipse(this.x, this.y, this.radius * 2, this.radius * 2)
     fill(255, 0 , 0)
     rect(30, 30, 2 * this.health, 40)
-    textSize(32)
-    text(this.kills, 750, 60)
-    text(this.totalKills, 750, 20)
+    textSize(25)
+    text("Total kills: " + this.totalKills, 550, 40)
+    text("Unspent kills: " + this.kills, 550, 70)
   }
 
   this.update = function() {
