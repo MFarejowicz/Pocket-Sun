@@ -176,6 +176,7 @@ function Menu() {
     text("Press 6 to upgrade", 50, 380)
     text("Kills: " + sun.kills, 620, 30)
     text("Unlock bullets!", 30, 460)
+    text("Current: " + (bulletsUnlocked ? "Unlocked" : "Locked"), 250, 460)
     text("Cost: " + this.bulletCost, 500, 460)
     text("Press 7 to upgrade", 50, 480)
     text("Bullet fire rate", 30, 520)

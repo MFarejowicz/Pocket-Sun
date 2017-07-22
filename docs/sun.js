@@ -13,7 +13,7 @@ function Sun() {
   this.fireDelay = 0
   this.fireRate = .2 //decrease to increase fire rate
   this.bulletSpeed = 10
-  this.bulletSize = 25
+  this.bulletSize = 5
 
   this.show = function() {
     for (let i = 0; i < this.bullets.length; i++){
