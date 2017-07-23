@@ -8,7 +8,7 @@ function Sun() {
   this.drain = .25 //decrease to slow drain
   this.healRate = 5
   this.totalKills = 0
-  this.kills = 0
+  this.kills = 10000
   this.bullets = []
   this.fireDelay = 0
   this.fireRate = .2 //decrease to increase fire rate
@@ -82,20 +82,20 @@ function Sun() {
     this.x -= this.speed
   }
   this.moveUpLeft = function() {
-    this.x -= this.speed/sqrt(2)
-    this.y -= this.speed/sqrt(2)
+    this.x -= (this.speed/sqrt(2))
+    this.y -= (this.speed/sqrt(2))
   }
   this.moveUpRight = function() {
-    this.x += this.speed/sqrt(2)
-    this.y -= this.speed/sqrt(2)
+    this.x += (this.speed/sqrt(2))
+    this.y -= (this.speed/sqrt(2))
   }
   this.moveDownLeft = function() {
-    this.x -= this.speed/sqrt(2)
-    this.y += this.speed/sqrt(2)
+    this.x -= (this.speed/sqrt(2))
+    this.y += (this.speed/sqrt(2))
   }
   this.moveDownRight = function() {
-    this.x += this.speed/sqrt(2)
-    this.y += this.speed/sqrt(2)
+    this.x += (this.speed/sqrt(2))
+    this.y += (this.speed/sqrt(2))
   }
   this.shootUp = function() {
     if (this.fireDelay <= 0) {
@@ -132,7 +132,7 @@ function Bullet(x, y, dirX, dirY, speed, size) {
   this.radius = size
 
   this.show = function() {
-    fill(204, 150, 0)
+    fill(204, 102, 0)
     ellipse(this.x,this.y, this.radius*2, this.radius*2)
   }
 

@@ -1,8 +1,8 @@
-function Lion(runScale) {
+function Lion(speed, runScale) {
   this.x = random(width)
   this.y = random(height)
   this.radius = 15
-  this.speed = 2
+  this.speed = speed
   this.dirX = random([-1, 0, 1])
   this.dirY = (this.dirX == 0 ? random([-1,1]) : random([-1,0,1]))
   this.runDistance = 100
@@ -44,15 +44,26 @@ function Lion(runScale) {
       this.dirY = 1
     }
     if (this.distance(sun) < this.runDistance + sun.radius) {
-      if (this.x < sun.x) {
-        this.x -= this.speed/this.runScale
+      if (this.x < sun.x - (sun.radius / sqrt(2))) {
+        this.dirX = -1
+      } else if (this.x > sun.x + (sun.radius / sqrt(2))){
+        this.dirX = 1
       } else {
-        this.x += this.speed/this.runScale
+        this.dirX = 0
       }
-      if (this.y < sun.y) {
-        this.y -= this.speed/this.runScale
+      if (this.y < sun.y - (sun.radius / sqrt(2))) {
+        this.dirY = -1
+      } else if (this.y > sun.y + (sun.radius / sqrt(2))){
+        this.dirY = 1
       } else {
-        this.y += this.speed/this.runScale
+        this.dirY = 0
+      }
+      if (this.dirX == 0 || this.dirY == 0){
+        this.x += this.dirX * this.speed / this.runScale
+        this.y += this.dirY * this.speed / this.runScale
+      } else {
+        this.x += this.dirX * this.speed / this.runScale / sqrt(2)
+        this.y += this.dirY * this.speed / this.runScale / sqrt(2)
       }
     } else {
       this.x += this.dirX * this.speed
