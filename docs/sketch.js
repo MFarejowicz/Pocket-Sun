@@ -7,8 +7,8 @@ var pause = false
 var gameOver
 var gameOverActive = false
 var bulletsUnlocked = false
-var spawnRate = 5.5 //decrease to increase spawn
-var lionLimit = 200
+var spawnRate = 5 //decrease to increase spawn
+var lionLimit = 100
 var lionRunScale = .8
 var lionSpeed = 2
 
@@ -136,24 +136,24 @@ function moveandshoot() {
 
 function Menu() {
   this.sizeCost = 25
-  this.sizeLevel = 0
+  this.sizeLevel = 1
   this.speedCost = 25
-  this.speedLevel = 0
+  this.speedLevel = 1
   this.healthCapCost = 25
-  this.healthCapLevel = 0
+  this.healthCapLevel = 1
   this.limitCost = 25
-  this.limitLevel = 0
+  this.limitLevel = 1
   this.spawnCost = 25
-  this.spawnLevel = 0
+  this.spawnLevel = 1
   this.runCost = 25
-  this.runLevel = 0
+  this.runLevel = 1
   this.bulletCost = 1000
   this.fireRateCost = 25
-  this.fireRateLevel = 0
+  this.fireRateLevel = 1
   this.bulletSpeedCost = 25
-  this.bulletSpeedLevel = 0
+  this.bulletSpeedLevel = 1
   this.bulletSizeCost = 25
-  this.bulletSizeLevel = 0
+  this.bulletSizeLevel = 1
 
   this.show = function(sun, lions) {
     fill(255)
@@ -306,7 +306,7 @@ function Menu() {
   }
   this.uplimit = function(){
     if (this.limitLevel < 10 && sun.kills >= this.limitCost){
-      lionLimit += 50
+      lionLimit += 100
       sun.kills -= this.limitCost
       this.limitCost += 25
       this.limitLevel += 1
@@ -356,6 +356,7 @@ function Menu() {
   this.upbulletsize = function(){
     if (this.bulletSizeLevel < 10 && sun.kills >= this.bulletSizeCost){
       sun.bulletSize += 5
+      sun.bulletHP += 1
       sun.kills -= this.bulletSizeCost
       this.bulletSizeCost += 25
       this.bulletSizeLevel += 1

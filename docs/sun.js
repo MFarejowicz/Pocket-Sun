@@ -8,12 +8,13 @@ function Sun() {
   this.drain = .25 //decrease to slow drain
   this.healRate = 5
   this.totalKills = 0
-  this.kills = 10000
+  this.kills = 500
   this.bullets = []
   this.fireDelay = 0
   this.fireRate = .2 //decrease to increase fire rate
   this.bulletSpeed = 10
   this.bulletSize = 5
+  this.bulletHP = 1
 
   this.show = function() {
     for (let i = 0; i < this.bullets.length; i++){
@@ -99,37 +100,38 @@ function Sun() {
   }
   this.shootUp = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x, this.y - this.radius, 0, -1, this.bulletSpeed, this.bulletSize))
+      this.bullets.push(new Bullet(this.x, this.y - this.radius, 0, -1, this.bulletSpeed, this.bulletSize, this.bulletHP))
       this.fireDelay = this.fireRate
     }
   }
   this.shootDown = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x, this.y + this.radius, 0, 1, this.bulletSpeed, this.bulletSize))
+      this.bullets.push(new Bullet(this.x, this.y + this.radius, 0, 1, this.bulletSpeed, this.bulletSize, this.bulletHP))
       this.fireDelay = this.fireRate
     }
   }
   this.shootRight = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x + this.radius, this.y, 1, 0, this.bulletSpeed, this.bulletSize))
+      this.bullets.push(new Bullet(this.x + this.radius, this.y, 1, 0, this.bulletSpeed, this.bulletSize, this.bulletHP))
       this.fireDelay = this.fireRate
     }
   }
   this.shootLeft = function() {
     if (this.fireDelay <= 0) {
-      this.bullets.push(new Bullet(this.x - this.radius, this.y, -1, 0, this.bulletSpeed, this.bulletSize))
+      this.bullets.push(new Bullet(this.x - this.radius, this.y, -1, 0, this.bulletSpeed, this.bulletSize, this.bulletHP))
       this.fireDelay = this.fireRate
     }
   }
 }
 
-function Bullet(x, y, dirX, dirY, speed, size) {
+function Bullet(x, y, dirX, dirY, speed, size, hp) {
   this.x = x
   this.y = y
   this.dirX = dirX
   this.dirY = dirY
   this.speed = speed
   this.radius = size
+  this.hp = hp
 
   this.show = function() {
     fill(204, 102, 0)

@@ -19,7 +19,10 @@ function Lion(speed, runScale) {
     }
     for (let i = sun.bullets.length-1; i >= 0; i--){
       if (this.distance(sun.bullets[i]) < sun.bullets[i].radius) {
-        sun.bullets.splice(i,1)
+        sun.bullets[i].hp -= 1
+        if (sun.bullets[i].hp <= 0){
+          sun.bullets.splice(i,1)
+        }
         return {hit: true, heal: false}
       }
     }
