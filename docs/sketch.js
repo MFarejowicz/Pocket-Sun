@@ -37,8 +37,11 @@ function draw() {
   }
   else {
     this.moveandshoot()
-    if (frameCount % this.spawnRate == 0 && lions.length < this.lionLimit) {
+    if (frameCount % spawnRate == 0 && lions.length < lionLimit) {
       lions.push(new Lion(lionSpeed, lionRunScale))
+      if (spawnRate < 1) {
+        lions.push(new Lion(lionSpeed, lionRunScale))
+      }
     }
     for (let i = lions.length-1; i >= 0; i--) {
       lions[i].show()
@@ -135,24 +138,24 @@ function moveandshoot() {
 }
 
 function Menu() {
-  this.sizeCost = 25
+  this.sizeCost = 10
   this.sizeLevel = 1
-  this.speedCost = 25
+  this.speedCost = 10
   this.speedLevel = 1
-  this.healthCapCost = 25
+  this.healthCapCost = 10
   this.healthCapLevel = 1
-  this.limitCost = 25
+  this.limitCost = 10
   this.limitLevel = 1
-  this.spawnCost = 25
+  this.spawnCost = 10
   this.spawnLevel = 1
-  this.runCost = 25
+  this.runCost = 10
   this.runLevel = 1
   this.bulletCost = 1000
-  this.fireRateCost = 25
+  this.fireRateCost = 10
   this.fireRateLevel = 1
-  this.bulletSpeedCost = 25
+  this.bulletSpeedCost = 10
   this.bulletSpeedLevel = 1
-  this.bulletSizeCost = 25
+  this.bulletSizeCost = 10
   this.bulletSizeLevel = 1
 
   this.show = function(sun, lions) {
@@ -164,15 +167,15 @@ function Menu() {
     textSize(20)
     text("Kills: " + sun.kills, 620, 30)
     text("Sun size", 30, 140)
-    text("Current: " + sun.radius, 250, 140)
+    text("Current: " + round(map(sun.radius,25,115,25,100)), 250, 140)
     text("Cost: " + this.sizeCost, 500, 140)
     text("Press 1 to upgrade", 50, 160)
     text("Sun speed", 30, 200)
-    text("Current: " + map(sun.speed, 5, 10, 18, 30), 250, 200)
+    text("Current: " + round(map(sun.speed, 4, 8.5, 25, 52)), 250, 200)
     text("Cost: " + this.speedCost, 500, 200)
     text("Press 2 to upgrade", 50, 220)
     text("Sun health cap", 30, 260)
-    text("Current: " + sun.healthCap, 250, 260)
+    text("Current: " + round(sun.healthCap), 250, 260)
     text("Cost: " + this.healthCapCost, 500, 260)
     text("Press 3 to upgrade", 50, 280)
     text("Lion limit", 30, 360)
@@ -180,11 +183,11 @@ function Menu() {
     text("Cost: " + this.limitCost, 500, 360)
     text("Press 4 to upgrade", 50, 380)
     text("Lion spawn rate", 30, 420)
-    text("Current: " + map(spawnRate, 4, 0, 1, 10), 250, 420)
+    text("Current: " + (spawnRate >= 1 ? round(map(spawnRate, 5, .5, 12, 60)) : 120), 250, 420)
     text("Cost: " + this.spawnCost, 500, 420)
     text("Press 5 to upgrade", 50, 440)
     text("Lion run speed", 30, 480)
-    text("Current: " + round(map(lionSpeed/lionRunScale, 1.3, 2.5, 0, 20)), 250, 480)
+    text("Current: " + round(map(lionRunScale, .8, 1.25, 20, 2)), 250, 480)
     text("Cost: " + this.runCost, 500, 480)
     text("Press 6 to upgrade", 50, 500)
     text("Unlock bullets!", 30, 580)
@@ -193,11 +196,11 @@ function Menu() {
     text("Press 7 to upgrade", 50, 600)
     if (bulletsUnlocked) {
       text("Bullet fire rate", 30, 640)
-      text("Current: " + sun.fireRate, 250, 640)
+      text("Current: " + round(map(sun.fireRate, .2,.065, 2, 20)), 250, 640)
       text("Cost: " + this.fireRateCost, 500, 640)
       text("Press 8 to upgrade", 50, 660)
       text("Bullet speed", 30, 700)
-      text("Current: " + sun.bulletSpeed, 250, 700)
+      text("Current: " + round(map(sun.bulletSpeed, 10,19,55,100)), 250, 700)
       text("Cost: " + this.bulletSpeedCost, 500, 700)
       text("Press 9 to upgrade", 50, 720)
       text("Bullet size", 30, 760)
@@ -282,25 +285,25 @@ function Menu() {
   }
   this.upsize = function(){
     if (this.sizeLevel < 10 && sun.kills >= this.sizeCost){
-      sun.radius += 20
+      sun.radius += 10
       sun.kills -= this.sizeCost
-      this.sizeCost += 25
+      this.sizeCost += 10
       this.sizeLevel += 1
     }
   }
   this.upspeed = function(){
     if (this.speedLevel < 10 && sun.kills >= this.speedCost){
-      sun.speed += 1
+      sun.speed += .5
       sun.kills -= this.speedCost
-      this.speedCost += 25
+      this.speedCost += 10
       this.speedLevel += 1
     }
   }
   this.uphealthcap = function(){
     if (this.healthCapLevel < 10 && sun.kills >= this.healthCapCost){
-      sun.healthCap += 25
+      sun.healthCap += (150/9)
       sun.kills -= this.healthCapCost
-      this.healthCapCost += 25
+      this.healthCapCost += 10
       this.healthCapLevel += 1
     }
   }
@@ -308,7 +311,7 @@ function Menu() {
     if (this.limitLevel < 10 && sun.kills >= this.limitCost){
       lionLimit += 100
       sun.kills -= this.limitCost
-      this.limitCost += 25
+      this.limitCost += 10
       this.limitLevel += 1
     }
   }
@@ -316,18 +319,18 @@ function Menu() {
     if (this.spawnLevel < 10 & sun.kills >= this.spawnCost){
       spawnRate -= .5
       sun.kills -= this.spawnCost
-      this.spawnCost += 25
+      this.spawnCost += 10
       this.spawnLevel += 1
     }
   }
   this.slowrun = function(){
     if (this.runLevel < 10 && sun.kills >= this.runCost){
       for (let i = 0; i < lions.length; i ++){
-        lions[i].runScale += .1
+        lions[i].runScale += .05
       }
-      lionRunScale += .1
+      lionRunScale += .05
       sun.kills -= this.runCost
-      this.runCost += 25
+      this.runCost += 10
       this.runLevel += 1
     }
   }
@@ -339,26 +342,26 @@ function Menu() {
   }
   this.upfirerate = function(){
     if (this.fireRateLevel < 10 && sun.kills >= this.fireRateCost){
-      sun.fireRate -= .02
+      sun.fireRate -= .015
       sun.kills -= this.fireRateCost
-      this.fireRateCost += 25
+      this.fireRateCost += 10
       this.fireRateLevel += 1
     }
   }
   this.upbulletspeed = function(){
     if (this.bulletSpeedLevel < 10 && sun.kills >= this.bulletSpeedCost){
-      sun.bulletSpeed += 5
+      sun.bulletSpeed += 1
       sun.kills -= this.bulletSpeedCost
-      this.bulletSpeedCost += 25
+      this.bulletSpeedCost += 10
       this.bulletSpeedLevel += 1
     }
   }
   this.upbulletsize = function(){
     if (this.bulletSizeLevel < 10 && sun.kills >= this.bulletSizeCost){
-      sun.bulletSize += 5
+      sun.bulletSize += 3
       sun.bulletHP += 1
       sun.kills -= this.bulletSizeCost
-      this.bulletSizeCost += 25
+      this.bulletSizeCost += 10
       this.bulletSizeLevel += 1
     }
   }

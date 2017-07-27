@@ -69,8 +69,13 @@ function Lion(speed, runScale) {
         this.y += this.dirY * this.speed / this.runScale / sqrt(2)
       }
     } else {
-      this.x += this.dirX * this.speed
-      this.y += this.dirY * this.speed
+      if (this.dirX == 0 || this.dirY == 0){
+        this.x += this.dirX * this.speed
+        this.y += this.dirY * this.speed
+      } else {
+        this.x += this.dirX * this.speed / sqrt(2)
+        this.y += this.dirY * this.speed / sqrt(2)
+      }
     }
   }
 

@@ -4,11 +4,11 @@ function Sun() {
   this.x = width / 2
   this.y = height / 2
   this.radius = 25
-  this.speed = 5
+  this.speed = 4
   this.drain = .25 //decrease to slow drain
   this.healRate = 5
   this.totalKills = 0
-  this.kills = 500
+  this.kills = 10000
   this.bullets = []
   this.fireDelay = 0
   this.fireRate = .2 //decrease to increase fire rate
