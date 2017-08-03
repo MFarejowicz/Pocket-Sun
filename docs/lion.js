@@ -1,32 +1,33 @@
-function Lion(speed, runScale) {
+function Lion(size, speed, runScale, alpha) {
   this.x = random(width)
   this.y = random(height)
-  this.radius = 15
+  this.radius = size
   this.speed = speed
+  this.alpha = alpha
   this.dirX = random([-1, 0, 1])
   this.dirY = (this.dirX == 0 ? random([-1,1]) : random([-1,0,1]))
   this.runDistance = 100
   this.runScale = runScale
 
   this.show = function() {
-    fill(255)
-    ellipse(this.x, this.y, this.radius, this.radius)
+    fill(255, 255, 255, this.alpha)
+    ellipse(this.x, this.y, this.radius * 2)
   }
 
   this.hits = function(sun) {
     if (this.distance(sun) < sun.radius) {
-      return {hit: true, heal: true}
+      return true
     }
-    for (let i = sun.bullets.length-1; i >= 0; i--){
-      if (this.distance(sun.bullets[i]) < sun.bullets[i].radius) {
-        sun.bullets[i].hp -= 1
-        if (sun.bullets[i].hp <= 0){
-          sun.bullets.splice(i,1)
-        }
-        return {hit: true, heal: false}
-      }
-    }
-    return {hit: false, heal: false}
+    // for (let i = sun.bullets.length-1; i >= 0; i--){
+    //   if (this.distance(sun.bullets[i]) < sun.bullets[i].radius) {
+    //     sun.bullets[i].hp -= 1
+    //     if (sun.bullets[i].hp <= 0){
+    //       sun.bullets.splice(i,1)
+    //     }
+    //     return {hit: true, heal: false}
+    //   }
+    // }
+    // return {hit: false, heal: false}
   }
 
   this.update = function(sun) {

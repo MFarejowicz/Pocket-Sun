@@ -5,7 +5,7 @@ function Sun() {
   this.y = height / 2
   this.radius = 25
   this.speed = 4
-  this.drain = .25 //decrease to slow drain
+  this.drain = .2 //decrease to slow drain
   this.healRate = 5
   this.totalKills = 0
   this.kills = 10000
@@ -21,7 +21,7 @@ function Sun() {
       this.bullets[i].show()
     }
     fill(204, 102, 0)
-    ellipse(this.x, this.y, this.radius * 2, this.radius * 2)
+    ellipse(this.x, this.y, this.radius * 2)
     fill(255, 0 , 0)
     rect(30, 30, 2 * this.health, 40)
     textSize(25)
@@ -134,7 +134,7 @@ function Bullet(x, y, dirX, dirY, speed, size, hp) {
   this.hp = hp
 
   this.show = function() {
-    fill(204, 102, 0)
+    fill("#f28a47")
     ellipse(this.x,this.y, this.radius*2, this.radius*2)
   }
 

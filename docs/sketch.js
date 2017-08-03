@@ -12,16 +12,18 @@ var gameOverActive = false
 var bulletsUnlocked = false
 var spawnRate = 5 //decrease to increase spawn
 var lionLimit = 100
-var lionRunScale = .8
-var lionSpeed = 2
+var lionRunScale = .6
+var lionSize = 7.5
+var lionSpeed = 1.5
+var lionAlpha = 255
 
 function preload() {
-  cs = loadFont('../static/fonts/cs.ttf')
+  // cs = loadFont('../static/fonts/cs.ttf')
 }
 
 function setup() {
   // bg = loadImage("../static/img/space.jpg")
-  textFont(cs)
+  // textFont(cs)
   var gameCanvas = createCanvas(800, 800)
   gameCanvas.parent("gameContainer")
   startMenu = new StartMenu()
@@ -50,28 +52,25 @@ function draw() {
   else {
     this.moveandshoot()
     if (frameCount % spawnRate == 0 && lions.length < lionLimit) {
-      lions.push(new Lion(lionSpeed, lionRunScale))
+      lions.push(new Lion(lionSize, lionSpeed, lionRunScale, lionAlpha))
       if (spawnRate < 1) {
-        lions.push(new Lion(lionSpeed, lionRunScale))
+        lions.push(new Lion(lionSize, lionSpeed, lionRunScale, lionAlpha))
       }
     }
     for (let i = lions.length-1; i >= 0; i--) {
       lions[i].show()
       lions[i].update(sun)
-      let impact = lions[i].hits(sun)
-      if (impact.hit){
+      if (lions[i].hits(sun)){
         lions.splice(i,1)
         sun.upkills()
-        if (impact.heal) {
-          sun.heal()
-        }
+        sun.heal()
       }
     }
     sun.show()
     sun.update()
-    if (sun.health <= 0) {
-      gameOverActive = true
-    }
+    // if (sun.health <= 0) {
+    //   gameOverActive = true
+    // }
   }
 }
 
@@ -202,7 +201,7 @@ function upMenu() {
     text("Cost: " + this.spawnCost, 500, 420)
     text("Press 5 to upgrade", 50, 440)
     text("Lion run speed", 30, 480)
-    text("Current: " + round(map(lionRunScale, .8, 1.25, 20, 2)), 250, 480)
+    text("Current: " + round(map(lionRunScale, .6, 1.5, 20, 2)), 250, 480)
     text("Cost: " + this.runCost, 500, 480)
     text("Press 6 to upgrade", 50, 500)
     text("Unlock bullets!", 30, 580)
@@ -301,6 +300,12 @@ function upMenu() {
   this.upsize = function(){
     if (this.sizeLevel < 10 && sun.kills >= this.sizeCost){
       sun.radius += 10
+      sun.drain += .05
+      sun.healRate -= .1
+      lionSize -= .25
+      for (let i = 0; i < lions.length; i ++){
+        lions[i].radius = lionSize
+      }
       sun.kills -= this.sizeCost
       this.sizeCost += 10
       this.sizeLevel += 1
@@ -309,6 +314,7 @@ function upMenu() {
   this.upspeed = function(){
     if (this.speedLevel < 10 && sun.kills >= this.speedCost){
       sun.speed += .5
+      sun.drain += .025
       sun.kills -= this.speedCost
       this.speedCost += 10
       this.speedLevel += 1
@@ -324,7 +330,7 @@ function upMenu() {
   }
   this.uplimit = function(){
     if (this.limitLevel < 10 && sun.kills >= this.limitCost){
-      lionLimit += 100
+      lionLimit += 50
       sun.kills -= this.limitCost
       this.limitCost += 10
       this.limitLevel += 1
@@ -340,10 +346,10 @@ function upMenu() {
   }
   this.slowrun = function(){
     if (this.runLevel < 10 && sun.kills >= this.runCost){
+      lionRunScale += .1
       for (let i = 0; i < lions.length; i ++){
-        lions[i].runScale += .05
+        lions[i].runScale = lionRunScale
       }
-      lionRunScale += .05
       sun.kills -= this.runCost
       this.runCost += 10
       this.runLevel += 1
@@ -352,7 +358,11 @@ function upMenu() {
   this.unlockbullets = function() {
     if (sun.kills >= this.bulletCost){
       bulletsUnlocked = true
+      lionAlpha = 150
       sun.kills -= this.bulletCost
+      for (let i = 0; i < lions.length; i ++){
+        lions[i].alpha = lionAlpha
+      }
     }
   }
   this.upfirerate = function(){
