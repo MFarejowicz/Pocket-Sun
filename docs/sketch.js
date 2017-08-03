@@ -1,8 +1,11 @@
 var bg
+var cs
 var sun
 var lions = []
-var menu
-var menuActive = false
+var startMenu
+var startMenuActive = true
+var upMenu
+var upMenuActive = false
 var pause = false
 var gameOver
 var gameOverActive = false
@@ -12,23 +15,32 @@ var lionLimit = 100
 var lionRunScale = .8
 var lionSpeed = 2
 
+function preload() {
+  cs = loadFont('../static/fonts/cs.ttf')
+}
+
 function setup() {
   // bg = loadImage("../static/img/space.jpg")
+  textFont(cs)
   var gameCanvas = createCanvas(800, 800)
   gameCanvas.parent("gameContainer")
-  sun = new Sun()
-  menu = new Menu()
+  startMenu = new StartMenu()
   gameOver = new GameOver()
+  sun = new Sun()
+  upMenu = new upMenu()
 }
 
 function draw() {
   background(0)
-  if (this.menuActive) {
-    menu.show(sun,lions)
+  if (this.startMenuActive){
+    startMenu.show()
   }
-  // else if (this.gameOverActive) {
-  //   gameOver.show()
-  // }
+  else if (this.upMenuActive) {
+    upMenu.show(sun,lions)
+  }
+  else if (this.gameOverActive) {
+    gameOver.show()
+  }
   else if (this.pause){
     for (let i = lions.length-1; i >=0; i--){
       lions[i].show()
@@ -57,48 +69,51 @@ function draw() {
     }
     sun.show()
     sun.update()
-    // if (sun.health <= 0) {
-    //   gameOverActive = true
-    // }
+    if (sun.health <= 0) {
+      gameOverActive = true
+    }
   }
 }
 
 function keyPressed() {
-  if (!this.menuActive && keyCode === 69){
-    this.menuActive = true
+  if (this.startMenuActive && keyCode === 32){
+    this.startMenuActive = false
   }
-  else if (this.menuActive && keyCode === 69){
-    this.menuActive = false
+  else if (!this.startMenuActive && !this.upMenuActive && keyCode === 69){
+    this.upMenuActive = true
   }
-  else if (this.menuActive && keyCode === 49) {
-    menu.upsize()
+  else if (this.upMenuActive && keyCode === 69){
+    this.upMenuActive = false
   }
-  else if (this.menuActive && keyCode === 50) {
-    menu.upspeed()
+  else if (this.upMenuActive && keyCode === 49) {
+    upMenu.upsize()
   }
-  else if (this.menuActive &&keyCode === 51) {
-    menu.uphealthcap()
+  else if (this.upMenuActive && keyCode === 50) {
+    upMenu.upspeed()
   }
-  else if (this.menuActive && keyCode === 52) {
-    menu.uplimit()
+  else if (this.upMenuActive &&keyCode === 51) {
+    upMenu.uphealthcap()
   }
-  else if (this.menuActive && keyCode === 53) {
-    menu.upspawn()
+  else if (this.upMenuActive && keyCode === 52) {
+    upMenu.uplimit()
   }
-  else if (this.menuActive && keyCode === 54) {
-    menu.slowrun()
+  else if (this.upMenuActive && keyCode === 53) {
+    upMenu.upspawn()
   }
-  else if (this.menuActive && !this.bulletsUnlocked && keyCode === 55) {
-    menu.unlockbullets()
+  else if (this.upMenuActive && keyCode === 54) {
+    upMenu.slowrun()
   }
-  else if (this.menuActive && this.bulletsUnlocked && keyCode === 56) {
-    menu.upfirerate()
+  else if (this.upMenuActive && !this.bulletsUnlocked && keyCode === 55) {
+    upMenu.unlockbullets()
   }
-  else if (this.menuActive && this.bulletsUnlocked && keyCode === 57) {
-    menu.upbulletspeed()
+  else if (this.upMenuActive && this.bulletsUnlocked && keyCode === 56) {
+    upMenu.upfirerate()
   }
-  else if (this.menuActive && this.bulletsUnlocked && keyCode === 48) {
-    menu.upbulletsize()
+  else if (this.upMenuActive && this.bulletsUnlocked && keyCode === 57) {
+    upMenu.upbulletspeed()
+  }
+  else if (this.upMenuActive && this.bulletsUnlocked && keyCode === 48) {
+    upMenu.upbulletsize()
   }
   else if (!this.pause && keyCode == 81){
     this.pause = true
@@ -137,7 +152,7 @@ function moveandshoot() {
   }
 }
 
-function Menu() {
+function upMenu() {
   this.sizeCost = 10
   this.sizeLevel = 1
   this.speedCost = 10
@@ -364,6 +379,55 @@ function Menu() {
       this.bulletSizeCost += 10
       this.bulletSizeLevel += 1
     }
+  }
+}
+
+function StartMenu() {
+
+  this.show = function() {
+    fill(255)
+    rect(0,0,799,799)
+    fill(204,102,0)
+    ellipse(650, 525, 80, 80)
+    fill("white")
+    ellipse(600, 325, 20,20)
+    ellipse(640, 310, 20,20)
+    ellipse(680, 380, 20,20)
+    ellipse(670, 285, 20,20)
+    ellipse(630, 360, 20,20)
+    fill("black")
+    line(650, 585, 650, 615)
+    line(630, 580, 630, 610)
+    line(670, 580, 670, 610)
+    fill("#f17e33")
+    textSize(100)
+    text("POCKET SUN!", 20, 100)
+    textSize(60)
+    text("The Game", 60, 160)
+    textSize(20)
+    textStyle(ITALIC)
+    text("To answer the age old question:", 20, 200)
+    text("Who would win? 1 trillion lions or the sun?", 60, 230)
+    textStyle(BOLD)
+    text("Gameplay:", 20, 300)
+    text("Instructions:", 20, 600)
+    textStyle(NORMAL)
+    text("You play as the sun! It is your mission to exterminate", 30, 320)
+    text(" 1 trillion lions and prove that you are the superior", 30, 340)
+    text(" mass in the universe.", 30, 360)
+    text("Run over lions to consume them and recharge your", 30, 390)
+    text(" constantly draining solar mass", 30, 410)
+    text("Spend your earned kills to get upgrades and increase", 30, 440)
+    text(" your killing potential", 30, 460)
+    text("Be on the lookout for stronger enemies and mini-bosses.", 30, 490)
+    text(" They can fight back, but offer greater kill rewards", 30, 510)
+    text("Use WASD to move around", 30, 620)
+    text("Use Q to pause and unpause", 30, 650)
+    text("Use E to open and close the upgrade menu", 30, 680)
+    text("Follow the upgrade menu instructions to purchase upgrades", 40, 700)
+    text("Use the arrow keys to shoot (once unlocked)", 30, 730)
+    textSize(30)
+    text("Press SPACE to start the game!", 190, 780)
   }
 }
 
