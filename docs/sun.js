@@ -8,7 +8,7 @@ function Sun() {
   this.drain = .2 //decrease to slow drain
   this.healRate = 5
   this.totalKills = 0
-  this.kills = 10000
+  this.kills = 0
   this.bullets = []
   this.fireDelay = 0
   this.fireRate = .2 //decrease to increase fire rate
@@ -55,6 +55,12 @@ function Sun() {
       this.y = height
     }
     this.fireDelay -=.01
+  }
+
+  this.hits = function(thing) {
+    if (this.distance(thing) < this.radius) {
+      return true
+    }
   }
 
   this.upkills = function() {
@@ -121,6 +127,11 @@ function Sun() {
       this.bullets.push(new Bullet(this.x - this.radius, this.y, -1, 0, this.bulletSpeed, this.bulletSize, this.bulletHP))
       this.fireDelay = this.fireRate
     }
+  }
+
+  this.distance = function(thing) {
+    let distance = sqrt(pow(this.x - thing.x, 2) + pow(this.y - thing.y, 2))
+    return distance
   }
 }
 

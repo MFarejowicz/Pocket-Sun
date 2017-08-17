@@ -2,6 +2,7 @@ var bg
 var cs
 var sun
 var lions = []
+var powerups = []
 var startMenu
 var startMenuActive = true
 var upMenu
@@ -18,18 +19,19 @@ var lionSpeed = 1.5
 var lionAlpha = 255
 
 function preload() {
-  // cs = loadFont('../static/fonts/cs.ttf')
+  cs = loadFont('../static/fonts/cs.ttf')
 }
 
 function setup() {
   // bg = loadImage("../static/img/space.jpg")
-  // textFont(cs)
+  textFont(cs)
   var gameCanvas = createCanvas(800, 800)
   gameCanvas.parent("gameContainer")
   startMenu = new StartMenu()
   gameOver = new GameOver()
   sun = new Sun()
   upMenu = new upMenu()
+  // powerups.push(new Heal())
 }
 
 function draw() {
@@ -64,6 +66,14 @@ function draw() {
         lions.splice(i,1)
         sun.upkills()
         sun.heal()
+      }
+    }
+    for (let j = powerups.length-1; j >= 0; j--){
+      powerups[j].show()
+      powerups[j].update()
+      if (sun.hits(powerups[j])) {
+        powerups[j].activate(sun)
+        powerups.splice(j, 1)
       }
     }
     sun.show()
